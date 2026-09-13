@@ -1,12 +1,14 @@
-# 贡献指南
+# Contributing
 
-感谢关注 AI Frontier Daily。项目目前以中文日报和 macOS 本机运行体验为主，欢迎提交修复、测试、来源适配和文档改进。
+[English](CONTRIBUTING.md) | [Chinese](CONTRIBUTING.zh-CN.md)
 
-## 开发环境
+Thank you for your interest in AI Frontier Daily. The project currently focuses on Chinese daily briefings and a macOS local-first experience. Contributions are welcome for bug fixes, tests, source adapters, quality rules, and documentation.
 
-- Python 3.11 或更高版本
-- Node.js 需要能够运行当前前端工具链
-- macOS 是服务安装脚本的正式支持平台；其他 Unix 系统请手动运行服务
+## Development environment
+
+- Python 3.11 or newer
+- Node.js compatible with the current frontend toolchain
+- macOS is the supported platform for service-installation scripts; other Unix systems should run the service manually
 
 ```bash
 python3 -m venv .venv
@@ -17,9 +19,9 @@ npm run build
 cd ..
 ```
 
-## 本地验证
+## Local verification
 
-提交前至少运行：
+Run at least the following before submitting a change:
 
 ```bash
 .venv/bin/python -m compileall -q src
@@ -27,7 +29,7 @@ cd ..
 cd frontend && npm run build
 ```
 
-不需要模型或外网即可运行确定性测试样例：
+The deterministic fixture run does not require a model or external network access:
 
 ```bash
 FRONTIER_LLM_ENABLED=0 \
@@ -36,21 +38,21 @@ FRONTIER_LLM_ENABLED=0 \
   --no-llm
 ```
 
-## 提交变更
+## Changes
 
-- 一个提交尽量只解决一个问题，并在提交说明中说明行为变化。
-- 新增采集器、质量规则或去重规则时，应同步增加测试和文档。
-- 不要提交 `config/app.json`、`data/`、`logs/`、数据库、模型认证文件、API 密钥或抓取生成物。
-- 不要把真实的私有文章、公司内部材料或需要授权的内容放入测试样例。
-- 涉及安全边界、来源请求、子进程或配置路径的改动，应在 PR 描述中说明威胁模型和验证方式。
+- Keep each commit focused on one problem and describe behavior changes in the commit message.
+- Add or update tests and documentation when changing collectors, quality rules, or deduplication behavior.
+- Do not commit `config/app.json`, `data/`, `logs/`, databases, model credentials, API keys, or generated fetch artifacts.
+- Do not place real private articles, company-internal material, or content requiring authorization in test fixtures.
+- For changes involving security boundaries, source requests, subprocesses, or configuration paths, describe the threat model and verification steps in the pull request.
 
-## Pull Request
+## Pull requests
 
-PR 描述建议包含：
+A pull request should describe:
 
-1. 要解决的问题和设计取舍；
-2. 影响的配置、数据库或用户行为；
-3. 执行过的测试命令及结果；
-4. 如果涉及外部来源，说明来源条款、速率限制和失败处理。
+1. The problem being solved and the relevant design trade-offs;
+2. Configuration, database, or user-behavior changes;
+3. Test commands and their results;
+4. Source terms, rate limits, and failure handling when external sources are involved.
 
-请不要在公开 Issue 或 PR 中粘贴密钥、认证文件、私有 URL、完整运行日志或个人数据。
+Never paste secrets, credential files, private URLs, complete runtime logs, or personal data into a public issue or pull request.
