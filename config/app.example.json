@@ -1,0 +1,21 @@
+{
+  "timezone": "Asia/Shanghai",
+  "schedule": "08:30",
+  "lookback_hours": 72,
+  "catchup_hours": 12,
+  "max_candidates": 36,
+  "max_items": 8,
+  "max_fetch_chars": 18000,
+  "focus_profile": "人工智能编程代理、智能体工具、代理模型、本地推理、推理优化、草稿模型、检索工具、技能插件、开发者工作流、智能体安全和 GitHub 有实际价值的开源项目。优先关注工具实际能力、模型选择、上下文与记忆、评测、许可证和可复现部署，过滤泛泛的消费产品、广告和与开发者工作流无关的新闻。",
+  "host": "127.0.0.1",
+  "port": 8787,
+  "agent": {
+    "enabled": false,
+    "required_for_ready": false,
+    "binary": "pi",
+    "provider": "",
+    "model": "",
+    "thinking": "medium",
+    "timeout_seconds": 900
+  }
+}

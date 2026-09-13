@@ -1,0 +1,23 @@
+[
+  {
+    "title": "OpenAI pauses frontier RL training for stronger cyber safeguards",
+    "url": "https://example.com/openai-astra-safety?utm_source=daily",
+    "published_at": "2026-08-24T08:00:00+08:00",
+    "summary": "OpenAI paused a frontier reinforcement-learning run while strengthening isolation and monitoring.",
+    "content": "The company says an upcoming model may meet a critical cybersecurity capability threshold. The largest planned frontier RL run remains on hold."
+  },
+  {
+    "title": "OpenAI pauses frontier RL training for stronger cyber safeguards",
+    "url": "https://example.com/openai-astra-safety",
+    "published_at": "2026-08-24T08:00:00+08:00",
+    "summary": "OpenAI paused a frontier reinforcement-learning run while strengthening isolation and monitoring.",
+    "content": "The company says an upcoming model may meet a critical cybersecurity capability threshold. The largest planned frontier RL run remains on hold."
+  },
+  {
+    "title": "DeepSeek releases V4 Flash Vision experimental API",
+    "url": "https://example.com/deepseek-v4-vision",
+    "published_at": "2026-08-24T09:00:00+08:00",
+    "summary": "The experimental model adds image inputs to the V4 Flash agent API.",
+    "content": "It supports Chat Completions, Messages and Responses APIs. Images can be supplied by URL, base64 or Files API."
+  }
+]

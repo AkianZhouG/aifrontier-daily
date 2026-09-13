@@ -1,0 +1,81 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+LABEL="com.aifrontier.daily"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+SERVICE="gui/$(id -u)/$LABEL"
+URL="http://127.0.0.1:8787"
+CMD="${1:-status}"
+shift || true
+
+api_run() {
+  local fixture="${1:-}" no_llm="${2:-false}"
+  FRONTIER_FIXTURE="$fixture" FRONTIER_NO_LLM="$no_llm" python3 - <<'PY'
+import json, os, urllib.request, http.cookiejar
+base='http://127.0.0.1:8787'
+jar=http.cookiejar.CookieJar()
+opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+session=json.load(opener.open(base+'/api/session', timeout=5))
+payload={'no_llm': os.environ.get('FRONTIER_NO_LLM') == 'true'}
+if os.environ.get('FRONTIER_FIXTURE'): payload['fixture']=os.environ['FRONTIER_FIXTURE']
+request=urllib.request.Request(
+    base+'/api/runs',
+    data=json.dumps(payload).encode(),
+    headers={
+        'Content-Type':'application/json',
+        'Origin':base,
+        'X-Frontier-CSRF':session['csrf_token'],
+    },
+    method='POST',
+)
+print(json.dumps(json.load(opener.open(request, timeout=10)), ensure_ascii=False, indent=2))
+PY
+}
+
+case "$CMD" in
+  setup) exec "$ROOT/scripts/setup.sh" ;;
+  install) exec "$ROOT/scripts/install-launchd.sh" ;;
+  uninstall) exec "$ROOT/scripts/uninstall-launchd.sh" ;;
+  start)
+    if launchctl print "$SERVICE" >/dev/null 2>&1; then
+      launchctl kickstart -k "$SERVICE"
+    else
+      [ -f "$PLIST" ] || { echo "尚未安装，请先运行：$0 install" >&2; exit 1; }
+      launchctl bootstrap "gui/$(id -u)" "$PLIST"
+    fi
+    ;;
+  stop) launchctl bootout "$SERVICE" ;;
+  restart) launchctl kickstart -k "$SERVICE" ;;
+  status)
+    if launchctl print "$SERVICE" >/dev/null 2>&1; then
+      launchctl print "$SERVICE" | grep -E '^\s*(state|pid|runs|last exit code) =' || true
+    else
+      echo "launchd：服务未加载"
+    fi
+    python3 - <<'PY' || true
+import json, urllib.request
+try:
+    health=json.load(urllib.request.urlopen('http://127.0.0.1:8787/api/health', timeout=2))
+    print('本机接口：正常')
+    print('服务版本：', health.get('version', '未记录'))
+    print('启动时间：', health.get('started_at', '未记录'))
+except Exception:
+    print('本机接口：不可用')
+PY
+    ;;
+  open) open "$URL" ;;
+  logs) tail -f "$ROOT/logs/service.log" "$ROOT/logs/service.err.log" ;;
+  run) api_run "" false ;;
+  test-run)
+    TEST_DATA="$(mktemp -d -t ai-frontier-daily-test.XXXXXX)"
+    FRONTIER_ROOT="$ROOT" FRONTIER_DATA_DIR="$TEST_DATA/data" FRONTIER_LOGS_DIR="$TEST_DATA/logs" \
+      FRONTIER_LLM_ENABLED=0 "$ROOT/.venv/bin/frontier-daily" run \
+      --fixture "$ROOT/tests/fixtures/frontier-items.json" --no-llm --trigger fixture-smoke
+    echo "测试样例产物：$TEST_DATA/data/editions"
+    ;;
+  *)
+    echo "用法：$0 {setup|install|uninstall|start|stop|restart|status|open|logs|run|test-run}" >&2
+    exit 2
+    ;;
+esac
