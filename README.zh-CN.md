@@ -86,7 +86,7 @@ flowchart LR
 ## 快速开始
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/AkianZhouG/aifrontier-daily.git
 cd aifrontier-daily
 scripts/briefingctl setup
 scripts/briefingctl install

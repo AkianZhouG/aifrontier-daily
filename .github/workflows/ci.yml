@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,8 +19,6 @@ jobs:
         python-version: ['3.11', '3.12']
     env:
       FRONTIER_LLM_ENABLED: '0'
-      FRONTIER_DATA_DIR: ${{ runner.temp }}/frontier-daily-data
-      FRONTIER_LOGS_DIR: ${{ runner.temp }}/frontier-daily-logs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,6 +30,9 @@ jobs:
       - name: Compile Python package
         run: python -m compileall -q src
       - name: Run Python tests
+        env:
+          FRONTIER_DATA_DIR: ${{ runner.temp }}/frontier-daily-data
+          FRONTIER_LOGS_DIR: ${{ runner.temp }}/frontier-daily-logs
         run: python -m pytest
 
   frontend:
