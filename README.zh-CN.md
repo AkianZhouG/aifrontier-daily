@@ -150,7 +150,7 @@ npm run dev
 
 Vite 只绑定 `127.0.0.1:5174`，并代理 `/api` 到 8787。
 
-贡献和验证方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，安全问题报告方式见 [SECURITY.md](SECURITY.md)。
+贡献和验证方式见 [CONTRIBUTING.zh-CN.md](CONTRIBUTING.zh-CN.md)，安全问题报告方式见 [SECURITY.zh-CN.md](SECURITY.zh-CN.md)。
 
 ## 配置
 
